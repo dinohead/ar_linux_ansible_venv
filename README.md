@@ -1,6 +1,6 @@
 # Linux Ansible Virtual Environment
 
-This role will create a python virtual environment containing Ansible, supporting python libraries, and the Azure python sdk (https://github.com/Azure/azure-sdk-for-python).
+This Ansible role will create a python virtual environment containing Ansible, supporting python libraries, and the Azure python sdk (https://github.com/Azure/azure-sdk-for-python).
 
 ## Requirements
 
