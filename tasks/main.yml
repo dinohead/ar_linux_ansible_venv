@@ -1,0 +1,87 @@
+---
+# tasks file for role_template
+
+- name: SHELL | Get user's group
+  shell: "/usr/bin/id {{ linux_ansible_venv_user }} -gn"
+  register: command_result
+
+- set_fact:
+    linux_ansible_venv_user_group: "{{ command_result.stdout_lines[0] }}"
+
+- name: APT | ensure required packages are installed
+  become: true
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+  apt:
+    name: "{{ linux_ansible_venv_apt }}"
+    state: latest
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+
+- name: YUM | ensure required rpms are installed
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+  yum:
+    name: "{{ linux_ansible_venv_yum }}"
+    state: present
+    update_cache: no
+  when: ansible_os_family == 'RedHat'
+
+- name: PIP | ensure virtualenv is installed in system python enviornment
+  become: true
+  become_user: root
+  pip:
+    name: virtualenv
+    state: present
+    umask: '0022'
+    extra_args: '--upgrade'
+
+- name: PIP | Install ansible into virtualenv
+  become: true
+  become_user: root
+  pip:
+    name: "{{ linux_ansible_venv_pip }}"
+    virtualenv: "{{ linux_ansible_venv_path}}/venv_ansible-{{ linux_ansible_venv_version }}"
+    virtualenv_command: virtualenv
+    virtualenv_site_packages: false
+    state: present
+    extra_args: '--upgrade'
+
+- name: FIND | Get names of all of the files in system python selinux library
+  find:
+    path: "/usr/lib64/python2.7/site-packages/selinux"
+  register: command_result
+
+- name: FILE | Ensure directory for the python selinux library exists
+  become: true
+  become_user: root
+  file:
+    state: directory
+    path: '{{ linux_ansible_venv_path }}/venv_ansible-{{ linux_ansible_venv_version }}/lib/python2.7/site-packages/selinux'
+    owner: "{{ linux_ansible_venv_user }}"
+    group: "{{ linux_ansible_venv_user_group }}"
+    mode: 'u=rwx,g=rx,o=rx'
+
+- name: COPY | Add the selinux library to the virutalenv
+  become: true
+  become_user: root
+  copy:
+    src: "{{ item.path }}"
+    dest: '{{ linux_ansible_venv_path }}/venv_ansible-{{ linux_ansible_venv_version }}/lib/python2.7/site-packages/selinux/{{ item.path.split("/") | last }}'
+    owner: "{{ linux_ansible_venv_user }}"
+    group: "{{ linux_ansible_venv_user_group }}"
+    mode: "{{ item.mode }}"
+    remote_src: true
+  with_items: "{{ command_result.files }}"
+
+- name: FILE | Change ownership of the virtual enviornment
+  become: true
+  become_user: root
+  file:
+    path: "{{ linux_ansible_venv_path}}/venv_ansible-{{ linux_ansible_venv_version }}"
+    owner: "{{ linux_ansible_venv_user }}"
+    group: "{{ linux_ansible_venv_user_group }}"
+    state: directory
+    recurse: true
