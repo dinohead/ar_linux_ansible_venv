@@ -2,22 +2,28 @@
 
 linux_ansible_venv_user: "{{ ansible_user_id }}"
 linux_ansible_venv_path: "{{ ansible_user_dir }}"
-linux_ansible_venv_version: '2.7.5'
+linux_ansible_venv_version: '2.7.10'
 
 # variables you probably don't want to change
 
 linux_ansible_venv_yum:
   - gcc
+  - git
+  - krb5-devel
+  - krb5-libs
+  - krb5-workstation
   - libffi-devel
   - libxml2-devel
   - libxml2-python
   - libxslt-devel
+  - openldap-clients
   - openssl-devel
+  - pam-krb5
   - python-devel
   - python-pip
-  - git
-  - krb5-devel
-  - krb5-workstation
+  - realmd
+  - samba-common-tools
+  - sssd
 
 linux_ansible_venv_apt:
   - 'build-essential'
@@ -30,19 +36,23 @@ linux_ansible_venv_apt:
   - 'krb5-user'
 
 linux_ansible_venv_pip:
-  - pip
+  - 'ansible=={{ linux_ansible_venv_version }}'
+  - 'ansible[azure]=={{ linux_ansible_venv_version }}'
   - azure
+  - boto
+  - boto3
+  - docker-py
+  - kerberos
   - lxml
+  - molecule
   - ntlm-auth
   - packaging
   - paramiko
+  - pip
+  - pymgit
   - pyvmomi
   - pywinrm
-  - requests-credssp
-  - pywinrm[kerberos]
   - pywinrm[credssp]
-  - pymgit
-  - 'ansible=={{ linux_ansible_venv_version }}'
-  - 'ansible[azure]=={{ linux_ansible_venv_version }}'
-  - molecule
-  - docker-py
+  - pywinrm[kerberos]
+  - requests
+  - requests-credssp
