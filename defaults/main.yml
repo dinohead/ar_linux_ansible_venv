@@ -18,7 +18,7 @@ linux_ansible_venv_yum:
   - libxslt-devel
   - openldap-clients
   - openssl-devel
-  - pam-krb5
+  - pam_krb5
   - python-devel
   - python-pip
   - realmd
