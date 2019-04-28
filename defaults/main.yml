@@ -56,3 +56,4 @@ linux_ansible_venv_pip:
   - pywinrm[kerberos]
   - requests
   - requests-credssp
+  - requests-kerberos
