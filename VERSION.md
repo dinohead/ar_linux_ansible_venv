@@ -4,6 +4,7 @@ See Semantic Versioning (http://semver.org/spec/v2.0.0.html)
 
 |Version|Codename|Date      |Notes                                      |
 |:------|:-------|:---------|:------------------------------------------|
+|0.1.6  |Venkman |2020-06-01|Updating for Python 3                      |
 |0.1.5  |Venkman |2019-04-26|Updating Defaults                          |
 |0.1.4  |Venkman |2019-01-07|Github Release                             |
 |0.1.3  |Venkman |2018-10-04|Updated defaults                           |

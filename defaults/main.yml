@@ -2,7 +2,7 @@
 
 linux_ansible_venv_user: "{{ ansible_user_id }}"
 linux_ansible_venv_path: "{{ ansible_user_dir }}"
-linux_ansible_venv_version: '2.7.10'
+linux_ansible_venv_version: '2.9.9'
 
 # variables you probably don't want to change
 
